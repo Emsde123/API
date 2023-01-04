@@ -1,0 +1,122 @@
+JSON path is similar to xpath, we can use it to filter results like we can find elements with xpath.
+JSON path starts with $. where xpath will start with //
+
+{
+ "store":{
+	"car":[  <--- CAR
+		{
+		"make":"Honda",
+		"model":"Accord",
+		"year":2010,
+		"price":11500
+		},
+		{
+		"make":"Honda",
+		"model":"Civic",
+		"year":2016,
+		"price":18000,
+      		"sunroof": true
+		},
+		{
+		"make":"Toyota",
+		"model":"Camry",
+		"year":2019,
+		"price":27000
+		},
+		{
+		"make":"Nissan",
+		"model":"Versa",
+		"year":2005,
+		"price":3200,
+        	"sunroof": true
+		}
+	       ],   <-- CAR END
+	 "bicycle":{
+		"colour": "red",
+		 "price": 99.99
+		}
+       }
+}
+
+
+Store is the parent element, it's what holds all of our information.
+Bicycle is another array inside the Store parent.
+
+Car is an array of objects, it holds all the car elements which each have their own properties. It holds 4 objects.
+TO write a syntax that will return all elements of car array it will look like this:
+$.store.car[*]
+ ^ we need to add the * inside the brackets because car is an array, and we want all the objects inside the array.
+
+ If we want to return the first object it will look like this:
+ $.store.car[0]  <--- Index is 0 for the first object so we will pass 0 into the brackets.
+
+ Now let's try to return the model of the firsst object in the car array:
+ $.store.car[0].model  <-- We specify what element of the Car array we want to interact with, then what object.
+
+To return all models in all Car elements we will write this out:
+$.store.car[*].model   <-- will return what is below.
+[
+  "Accord",
+  "Civic",
+  "Camry",
+  "Versa"
+]
+
+To return the model of the 2nd, 3rd, and 4th Car element the path will look like this:
+$.store.car[1,2,3].model
+
+First and 3rd car models will look like this
+$.store.car[0,2].model
+
+
+There is also a way to exclude anything past a certain point:
+It will include everything up to index 2.
+$.store.car[:2].model
+[
+  "Accord",
+  "Civic"
+]
+
+And we can also do the inverse of that, it will include everything past index 2.
+$.store.car[2:].model
+[
+  "Camry",
+  "Versa"
+]
+
+Returning all models starting from index 1:
+$.store.car[1:].model
+
+Returning all models between index 1 and index 3
+$.store.car[1:3].model
+
+Return last model of car array
+$.store.car[-1:].model
+
+Returning model and make of second object in Car array
+$.store.car[1].model,make
+
+--------------------------------------------------------------------------------------------------------------------------
+        MORE DETAILED JSON PATHS
+
+Searching for all objects that have the make of Honda by String
+$.store.car[?(@.make=='Honda')]
+
+Find all objects that are newer than 2011, we don't use quotation marks because it's an integer.
+$.store.car[?(@.year>2011)]
+
+All objects that are newer than 2010, and older than 2017 (you can either use & or && they both work)
+$.store.car[?(@.year>=2010 & @.year<2017)]
+
+Specifying a make and a year
+$.store.car[?(@.year<2017 && @.make=='Honda')]
+
+Find any objects that have a sunroof
+$.store.car[?(@.sunroof)]
+
+All objects that either have a sunroof or are a Honda
+$.store.car[?(@.sunroof || @.make=='Honda')]
+
+
+
+

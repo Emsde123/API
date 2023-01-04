@@ -23,6 +23,8 @@ public class CreateUser {
     @Test
     public void createNewUser(){
         String url = "https://gorest.co.in/public/v1/users";
+        // In real world you won't have this limited size of data. We'll be working with thousands and thousands of lines of data.
+        // So we can't just store our data in java files, we'll need a dedicated place to store data.
         String requestData = "{\n" +
                 "    \"name\": \"Daniel Bee\",\n" +
                 "    \"email\": \"daniel_Intuill231@google.com\",\n" +
